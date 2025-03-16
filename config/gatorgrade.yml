@@ -1,0 +1,213 @@
+setup: |
+  cd fibonaccicreator && poetry install
+  echo "Done installing project dependencies!"
+---
+
+# Reminder for ^^^:
+# All commands executed in the setup block are done in a
+# one-by-one fashion from the current working directory. This means
+# that there is no history associated with running the commands and
+# thus multiple commands must be run in a single chain.
+
+# perform checks on a file
+- fibonaccicreator/fibonaccicreator/main.py:
+    - description: Ensure that the main.py file exists in the fibonaccicreator/fibonaccicreator/ directory
+      check: ConfirmFileExists
+    - description: Complete all TODOs, remove the TODO markers, and rewrite comments for main.py
+      check: MatchFileFragment
+      options:
+        fragment: TODO
+        count: 0
+        exact: true
+    - description: Create a sufficient number of docstring (i.e., multiple-line) comments in main.py
+      check: CountMultipleLineComments
+      options:
+        language: "Python"
+        count: 3
+        exact: false
+    - description: Create a sufficient number of single-line comments in main.py
+      check: CountSingleLineComments
+      options:
+        language: "Python"
+        count: 10
+        exact: false
+
+# perform checks on a file
+- fibonaccicreator/fibonaccicreator/fibonacci.py:
+    - description: Ensure that the fibonacci.py file exists in the fibonaccicreator/fibonaccicreator/ directory
+      check: ConfirmFileExists
+    - description: Complete all TODOs, remove the TODO markers, and rewrite comments for fibonacci.py
+      check: MatchFileFragment
+      options:
+        fragment: TODO
+        count: 0
+        exact: true
+    - description: Import the List type annotation from the typing package in fibonacci.py
+      check: MatchFileFragment
+      options:
+        fragment: from typing import List
+        count: 1
+        exact: false
+    - description: Import the Tuple type annotation from the typing package in fibonacci.py
+      check: MatchFileFragment
+      options:
+        fragment: Tuple
+        count: 1
+        exact: false
+    - description: Return a tuple that only contains the values 0 and 1 inside of it in fibonacci.py
+      check: MatchFileFragment
+      options:
+        fragment: return (0, 1)
+        count: 1
+        exact: false
+    - description: Use the append function to add a value to an existing list in fibonacci.py
+      check: MatchFileFragment
+      options:
+        fragment: append(
+        count: 1
+        exact: false
+    - description: Use the += operator to create a new tuple and add contents to it in fibonacci.py
+      check: MatchFileFragment
+      options:
+        fragment: +=
+        count: 1
+        exact: false
+    - description: Create a sufficient number of docstring (i.e., multiple-line) comments in fibonacci.py
+      check: CountMultipleLineComments
+      options:
+        language: "Python"
+        count: 5
+        exact: false
+    - description: Create a sufficient number of single-line comments in fibonacci.py
+      check: CountSingleLineComments
+      options:
+        language: "Python"
+        count: 10
+        exact: false
+
+# perform checks on a file
+- fibonaccicreator/tests/test_fibonacci.py:
+    - description: Ensure that the test_fibonacci.py file exists in the fibonaccicreator/fibonaccicreator/test/ directory
+      check: ConfirmFileExists
+    - description: Complete all TODOs, remove the TODO markers, and rewrite comments for test_fibonacci.py
+      check: MatchFileFragment
+      options:
+        fragment: TODO
+        count: 0
+        exact: true
+    - description: Ensure that the test_fibonacci.py file contains the required number of test cases
+      check: MatchFileFragment
+      options:
+        fragment: test_
+        count: 5
+        exact: false
+    - description: Create a sufficient number of docstring (i.e., multiple-line) comments in test_fibonacci.py
+      check: CountMultipleLineComments
+      options:
+        language: "Python"
+        count: 6
+        exact: false
+    - description: Create a sufficient number of single-line comments in test_fibonacci.py
+      check: CountSingleLineComments
+      options:
+        language: "Python"
+        count: 5
+        exact: false
+
+# perform checks on a file
+- writing/reflection.md:
+    - description: Ensure that the reflection.md file exists in the writing/ directory
+      check: ConfirmFileExists
+    - description: Complete all TODOs, remove the TODO markers, and rewrite comments for the reflection
+      check: MatchFileFragment
+      options:
+        fragment: TODO
+        count: 0
+        exact: true
+    - description: Replace the 'Add Your Name Here' prompt in the reflection file
+      check: MatchFileFragment
+      options:
+        fragment: "Add Your Name Here"
+        count: 0
+        exact: true
+    - description: Write a minimum number of meaningful words in the reflection
+      check: CountFileWords
+      options:
+        count: 500
+        exact: false
+    - description: Confirm that the markdown file has the correct number of headers
+      check: CountMarkdownTags
+      options:
+        tag: heading
+        count: 14
+        exact: false
+    - description: Confirm that the markdown file has the correct number of fenced code blocks
+      check: CountMarkdownTags
+      options:
+        tag: code_block
+        count: 7
+        exact: false
+
+# run a command
+- description: Pass the source code formatting and linting checks run by ruff
+  command: cd fibonaccicreator && poetry run task ruff
+
+# run a command
+- description: Pass the linting checks run by mypy
+  command: cd fibonaccicreator && poetry run task mypy
+
+# run a command
+- description: Pass the linting checks run by pymarkdown
+  command: cd fibonaccicreator && poetry run task markdownlint
+
+# run a command
+- description: Pass all of the Pytest test cases
+  command: cd fibonaccicreator && poetry run task test
+
+# run a command
+- description: Run the fibonaccicreator program and ensure that it does not crash with iterative tuple
+  command: cd fibonaccicreator && poetry run fibonaccicreator --number 1000 --approach iterativetuple
+
+# run the program and confirm correct number of lines in the output
+- description: Run the fibonaccicreator program and ensure that it produces a correct minimum number of lines with iterative tuple
+  check: CountCommandOutput
+  options:
+    command: cd fibonaccicreator && poetry run fibonaccicreator --number 1000 --approach iterativetuple
+    count: 3
+    exact: false
+
+# run the program and confirm correct number of lines in the output
+- description: Run the fibonaccicreator program and ensure that it produces a correct numerical output label
+  check: MatchCommandFragment
+  options:
+    command: cd fibonaccicreator && poetry run fibonaccicreator --number 1000 --approach iterativetuple
+    fragment: "1000th"
+    count: 1
+    exact: false
+
+# run a command
+- description: Run the fibonaccicreator program and ensure that it does not crash with iterative list
+  command: cd fibonaccicreator && poetry run fibonaccicreator --number 1000 --approach iterativelist
+
+# run the program and confirm correct number of lines in the output
+- description: Run the fibonaccicreator program and ensure that it produces a correct minimum number of lines with iterative list
+  check: CountCommandOutput
+  options:
+    command: cd fibonaccicreator && poetry run fibonaccicreator --number 1000 --approach iterativelist
+    count: 3
+    exact: false
+
+# run the program and confirm correct number of lines in the output
+- description: Run the fibonaccicreator program and ensure that it produces a correct numerical output label
+  check: MatchCommandFragment
+  options:
+    command: cd fibonaccicreator && poetry run fibonaccicreator --number 1000 --approach iterativelist
+    fragment: "1000th"
+    count: 1
+    exact: false
+
+# count number of commits in the GitHub repository
+- description: Have at least a specific minimum of commits in the GitHub repository
+  check: CountCommits
+  options:
+    count: 10
