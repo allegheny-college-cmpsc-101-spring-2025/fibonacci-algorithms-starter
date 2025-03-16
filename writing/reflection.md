@@ -121,3 +121,5 @@ professional skills development.
 - Leveraging what you know from all experiments conducted this semester, what are "slow" ways to perform computations?
 - What stumbling blocks did you encounter while using recursive algorithms?
 - What resources did you consult when completing this project? How did they help you?
+
+TODO: Don't forget to participate on Discord weekly.
